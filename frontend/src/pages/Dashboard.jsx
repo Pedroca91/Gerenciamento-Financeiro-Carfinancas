@@ -137,12 +137,9 @@ export function Dashboard() {
       </div>
 
       {/* Charts */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Trends Panel */}
-        <TrendsPanel month={selectedMonth} year={selectedYear} />
-        
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Yearly Evolution */}
-        <Card className="card-hover lg:col-span-2">
+        <Card className="card-hover">
           <CardHeader>
             <CardTitle className="text-lg font-heading flex items-center gap-2">
               <PiggyBank className="h-5 w-5 text-primary" />
