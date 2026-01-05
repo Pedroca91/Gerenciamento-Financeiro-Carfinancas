@@ -101,3 +101,210 @@
 #====================================================================================================
 # Testing Data - Main Agent and testing sub agent both should log testing data below this section
 #====================================================================================================
+
+user_problem_statement: "Sistema completo de gerenciamento financeiro CarFinanças - verificar se todas as funcionalidades estão funcionando perfeitamente"
+
+backend:
+  - task: "API Health Check"
+    implemented: true
+    working: true
+    file: "/app/backend/server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: true
+        agent: "main"
+        comment: "API respondendo corretamente em /api/health"
+
+  - task: "Autenticação - Login"
+    implemented: true
+    working: "NA"
+    file: "/app/backend/server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Endpoint /api/auth/login - precisa testar"
+
+  - task: "Autenticação - Registro"
+    implemented: true
+    working: "NA"
+    file: "/app/backend/server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Endpoint /api/auth/register - precisa testar"
+
+  - task: "CRUD de Entradas (Receitas)"
+    implemented: true
+    working: "NA"
+    file: "/app/backend/server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Endpoints /api/incomes - precisa testar"
+
+  - task: "CRUD de Saídas (Despesas)"
+    implemented: true
+    working: "NA"
+    file: "/app/backend/server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Endpoints /api/expenses - precisa testar"
+
+  - task: "CRUD de Investimentos"
+    implemented: true
+    working: "NA"
+    file: "/app/backend/server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Endpoints /api/investments - precisa testar"
+
+  - task: "CRUD de Categorias"
+    implemented: true
+    working: "NA"
+    file: "/app/backend/server.py"
+    stuck_count: 0
+    priority: "medium"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Endpoints /api/categories - precisa testar"
+
+  - task: "CRUD de Cartões de Crédito"
+    implemented: true
+    working: "NA"
+    file: "/app/backend/server.py"
+    stuck_count: 0
+    priority: "medium"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Endpoints /api/credit-cards - precisa testar"
+
+  - task: "Dashboard Summary"
+    implemented: true
+    working: "NA"
+    file: "/app/backend/server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Endpoint /api/dashboard/summary - precisa testar"
+
+  - task: "Admin - Gerenciamento de Usuários"
+    implemented: true
+    working: "NA"
+    file: "/app/backend/server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Endpoints /api/admin/* - precisa testar"
+
+frontend:
+  - task: "Página de Login"
+    implemented: true
+    working: "NA"
+    file: "/app/frontend/src/pages/Login.jsx"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Interface de login - precisa testar"
+
+  - task: "Dashboard"
+    implemented: true
+    working: "NA"
+    file: "/app/frontend/src/pages/Dashboard.jsx"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Interface do dashboard - precisa testar"
+
+  - task: "Módulo de Entradas"
+    implemented: true
+    working: "NA"
+    file: "/app/frontend/src/pages/Entradas.jsx"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Interface de entradas - precisa testar"
+
+  - task: "Módulo de Saídas"
+    implemented: true
+    working: "NA"
+    file: "/app/frontend/src/pages/Saidas.jsx"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Interface de saídas - precisa testar"
+
+  - task: "Módulo de Investimentos"
+    implemented: true
+    working: "NA"
+    file: "/app/frontend/src/pages/Investimentos.jsx"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Interface de investimentos - precisa testar"
+
+metadata:
+  created_by: "main_agent"
+  version: "1.0"
+  test_sequence: 1
+  run_ui: false
+
+test_plan:
+  current_focus:
+    - "Autenticação - Login"
+    - "Autenticação - Registro"
+    - "CRUD de Entradas (Receitas)"
+    - "CRUD de Saídas (Despesas)"
+    - "CRUD de Investimentos"
+    - "Dashboard Summary"
+    - "Admin - Gerenciamento de Usuários"
+  stuck_tasks: []
+  test_all: true
+  test_priority: "high_first"
+
+agent_communication:
+  - agent: "main"
+    message: "Iniciando análise completa do sistema CarFinanças. Todos os serviços estão rodando. Credenciais do admin: email=Pedrohcarvalho1997@gmail.com, senha=S@muka91. Testar todas as APIs do backend para verificar se estão funcionando corretamente."
