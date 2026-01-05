@@ -15,6 +15,8 @@ import { Investimentos } from './pages/Investimentos';
 import { Relatorios } from './pages/Relatorios';
 import { Ajustes } from './pages/Ajustes';
 import { Admin } from './pages/Admin';
+import { Recorrentes } from './pages/Recorrentes';
+import { Cartoes } from './pages/Cartoes';
 
 // Component to setup global toast
 function ToastSetup() {
