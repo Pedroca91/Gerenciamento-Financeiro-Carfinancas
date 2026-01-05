@@ -10,6 +10,7 @@ import { Register } from './pages/Register';
 import { Dashboard } from './pages/Dashboard';
 import { Entradas } from './pages/Entradas';
 import { Saidas } from './pages/Saidas';
+import { Beneficios } from './pages/Beneficios';
 import { Investimentos } from './pages/Investimentos';
 import { Relatorios } from './pages/Relatorios';
 import { Ajustes } from './pages/Ajustes';
