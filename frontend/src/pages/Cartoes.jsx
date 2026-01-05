@@ -143,12 +143,13 @@ export function Cartoes() {
         setDialogOpen(false);
         setEditing(null);
         resetForm();
-        refreshData();
-        fetchSummary();
+        await fetchSummary();
+        if (refreshData) refreshData();
       } else {
         throw new Error('Erro ao salvar');
       }
     } catch (error) {
+      console.error('Erro:', error);
       toast.error('Erro ao salvar cartão');
     }
   };
