@@ -29,7 +29,7 @@ import {
 } from '../components/ui/dialog';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../components/ui/tabs';
 import { Badge } from '../components/ui/badge';
-import { toast } from 'sonner';
+import { toast } from '../components/ui/toast-provider';
 import { Settings, Plus, Pencil, Trash2, CreditCard, Tags } from 'lucide-react';
 
 export function Ajustes() {

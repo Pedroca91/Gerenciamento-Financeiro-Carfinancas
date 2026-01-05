@@ -12,7 +12,7 @@ import {
   TableRow,
 } from '../components/ui/table';
 import { Badge } from '../components/ui/badge';
-import { toast } from 'sonner';
+import { toast } from '../components/ui/toast-provider';
 import { Users, UserCheck, UserX, Trash2, Shield } from 'lucide-react';
 
 const API = `${process.env.REACT_APP_BACKEND_URL}/api`;

@@ -29,7 +29,7 @@ import {
   DialogTrigger,
 } from '../components/ui/dialog';
 import { Badge } from '../components/ui/badge';
-import { toast } from 'sonner';
+import { toast } from '../components/ui/toast-provider';
 import { Plus, Pencil, Trash2, ArrowUpCircle, CreditCard } from 'lucide-react';
 
 export function Saidas() {

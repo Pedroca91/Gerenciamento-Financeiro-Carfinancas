@@ -28,7 +28,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '../components/ui/dialog';
-import { toast } from 'sonner';
+import { toast } from '../components/ui/toast-provider';
 import { Plus, Pencil, Trash2, TrendingUp, Wallet, PiggyBank } from 'lucide-react';
 
 export function Investimentos() {
