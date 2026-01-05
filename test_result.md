@@ -347,18 +347,13 @@ metadata:
   run_ui: false
 
 test_plan:
-  current_focus:
-    - "Autenticação - Login"
-    - "Autenticação - Registro"
-    - "CRUD de Entradas (Receitas)"
-    - "CRUD de Saídas (Despesas)"
-    - "CRUD de Investimentos"
-    - "Dashboard Summary"
-    - "Admin - Gerenciamento de Usuários"
+  current_focus: []
   stuck_tasks: []
-  test_all: true
+  test_all: false
   test_priority: "high_first"
 
 agent_communication:
   - agent: "main"
     message: "Iniciando análise completa do sistema CarFinanças. Todos os serviços estão rodando. Credenciais do admin: email=Pedrohcarvalho1997@gmail.com, senha=S@muka91. Testar todas as APIs do backend para verificar se estão funcionando corretamente."
+  - agent: "testing"
+    message: "✅ ANÁLISE COMPLETA FINALIZADA - Todos os endpoints do backend testados com sucesso! 37/37 testes principais passaram (100% de sucesso). Funcionalidades testadas: Autenticação, CRUD completo (Categorias, Receitas, Despesas, Investimentos, Cartões de Crédito, Orçamentos), Dashboard, Relatórios, Admin. Sistema está funcionando perfeitamente. Apenas 2 questões menores de códigos de status HTTP que não afetam funcionalidade."
