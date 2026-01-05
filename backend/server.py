@@ -1236,28 +1236,40 @@ async def get_all_cards_summary(month: int, year: int, user: dict = Depends(get_
     """Resumo de todos os cartões"""
     cards = await db.credit_cards.find({"user_id": user["id"]}, {"_id": 0}).to_list(50)
     
+    if not cards:
+        return []
+    
+    # Otimização: Buscar todas as despesas de uma vez para todos os cartões
+    card_ids = [card["id"] for card in cards]
+    
+    # Busca única para despesas do mês
+    all_month_expenses = await db.expenses.find({
+        "user_id": user["id"],
+        "credit_card_id": {"$in": card_ids},
+        "month": month,
+        "year": year
+    }, {"_id": 0}).to_list(10000)
+    
+    # Busca única para despesas parceladas
+    all_installment_expenses = await db.expenses.find({
+        "user_id": user["id"],
+        "credit_card_id": {"$in": card_ids},
+        "installments": {"$gt": 1}
+    }, {"_id": 0}).to_list(5000)
+    
     summary = []
     for card in cards:
-        expenses = await db.expenses.find({
-            "user_id": user["id"],
-            "credit_card_id": card["id"],
-            "month": month,
-            "year": year
-        }, {"_id": 0}).to_list(1000)
+        # Filtrar despesas do cartão usando dados já carregados
+        card_expenses = [e for e in all_month_expenses if e.get("credit_card_id") == card["id"]]
+        total_spent = sum(e["value"] for e in card_expenses)
         
-        total_spent = sum(e["value"] for e in expenses)
         limit = card.get("limit", 0)
         available = limit - total_spent
         
-        # Contar parcelas futuras
-        installment_expenses = await db.expenses.find({
-            "user_id": user["id"],
-            "credit_card_id": card["id"],
-            "installments": {"$gt": 1}
-        }, {"_id": 0}).to_list(100)
-        
+        # Calcular parcelas futuras usando dados já carregados
+        card_installments = [e for e in all_installment_expenses if e.get("credit_card_id") == card["id"]]
         future_committed = 0
-        for exp in installment_expenses:
+        for exp in card_installments:
             remaining = exp.get("installments", 1) - exp.get("current_installment", 1)
             future_committed += exp["value"] * remaining
         
