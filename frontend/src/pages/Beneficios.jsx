@@ -31,13 +31,10 @@ import {
   Plus, 
   Pencil, 
   Trash2, 
-  CreditCard, 
   Utensils, 
   ShoppingCart,
   TrendingUp,
-  TrendingDown,
-  Wallet,
-  PiggyBank
+  Wallet
 } from 'lucide-react';
 import { useToast } from '../components/ui/toast-provider';
 import { PieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip, BarChart, Bar, XAxis, YAxis, CartesianGrid } from 'recharts';
