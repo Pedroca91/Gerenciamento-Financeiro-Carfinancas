@@ -188,7 +188,7 @@ export function Beneficios() {
       });
       
       if (response.ok) {
-        toast({ title: 'Crédito excluído!' });
+        toast.success('Crédito excluído!');
         fetchData();
       }
     } catch (error) {
