@@ -64,7 +64,7 @@ export function TopNav() {
           <div className="flex items-center gap-2">
             <Wallet className="h-8 w-8 text-primary" />
             <span className="text-xl font-heading font-semibold text-foreground">
-              CarFinanças
+              LP Finanças
             </span>
           </div>
 

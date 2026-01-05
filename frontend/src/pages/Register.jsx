@@ -48,7 +48,7 @@ export function Register() {
       <div className="w-full max-w-md animate-fade-in">
         <div className="flex items-center justify-center gap-3 mb-8">
           <Wallet className="h-12 w-12 text-primary" />
-          <h1 className="text-3xl font-heading font-bold text-foreground">CarFinanças</h1>
+          <h1 className="text-3xl font-heading font-bold text-foreground">LP Finanças</h1>
         </div>
 
         <Card className="border-border shadow-lg">
