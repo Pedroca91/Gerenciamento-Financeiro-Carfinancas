@@ -102,258 +102,154 @@
 # Testing Data - Main Agent and testing sub agent both should log testing data below this section
 #====================================================================================================
 
-user_problem_statement: "Sistema completo de gerenciamento financeiro CarFinanças - verificar se todas as funcionalidades estão funcionando perfeitamente"
+user_problem_statement: "Implementar Fase 1 (Metas de Orçamento, Recorrentes, Alertas, Tendências) e Fase 2 (Cartão de Crédito Avançado)"
 
 backend:
-  - task: "API Health Check"
+  - task: "API Recurring Transactions"
     implemented: true
-    working: true
+    working: "NA"
     file: "/app/backend/server.py"
     stuck_count: 0
     priority: "high"
-    needs_retesting: false
+    needs_retesting: true
     status_history:
-      - working: true
+      - working: "NA"
         agent: "main"
-        comment: "API respondendo corretamente em /api/health"
-      - working: true
-        agent: "testing"
-        comment: "✅ TESTADO - Endpoints /api/ e /api/health funcionando perfeitamente. Status 200 OK."
+        comment: "Endpoints /api/recurring - CRUD completo e geração automática"
 
-  - task: "Autenticação - Login"
+  - task: "API Alerts - Budget"
     implemented: true
-    working: true
+    working: "NA"
     file: "/app/backend/server.py"
     stuck_count: 0
     priority: "high"
-    needs_retesting: false
+    needs_retesting: true
     status_history:
       - working: "NA"
         agent: "main"
-        comment: "Endpoint /api/auth/login - precisa testar"
-      - working: true
-        agent: "testing"
-        comment: "✅ TESTADO - Login do admin funcionando perfeitamente. Token JWT gerado corretamente. Validação de credenciais funcionando."
+        comment: "Endpoint /api/alerts/budget - alertas de 80% e 100%"
 
-  - task: "Autenticação - Registro"
+  - task: "API Alerts - Due Dates"
     implemented: true
-    working: true
+    working: "NA"
     file: "/app/backend/server.py"
     stuck_count: 0
     priority: "high"
-    needs_retesting: false
+    needs_retesting: true
     status_history:
       - working: "NA"
         agent: "main"
-        comment: "Endpoint /api/auth/register - precisa testar"
-      - working: true
-        agent: "testing"
-        comment: "✅ TESTADO - Registro de usuário funcionando. Validação de email, criação de categorias padrão, fluxo de aprovação admin funcionando."
+        comment: "Endpoint /api/alerts/due-dates - contas vencidas e próximas"
 
-  - task: "CRUD de Entradas (Receitas)"
+  - task: "API Analysis - Trends"
     implemented: true
-    working: true
+    working: "NA"
     file: "/app/backend/server.py"
     stuck_count: 0
     priority: "high"
-    needs_retesting: false
+    needs_retesting: true
     status_history:
       - working: "NA"
         agent: "main"
-        comment: "Endpoints /api/incomes - precisa testar"
-      - working: true
-        agent: "testing"
-        comment: "✅ TESTADO - CRUD completo de receitas funcionando. GET, POST, PUT, DELETE testados. Filtros por mês/ano funcionando."
+        comment: "Endpoint /api/analysis/trends - comparativo mês atual vs anteriores"
 
-  - task: "CRUD de Saídas (Despesas)"
+  - task: "API Credit Cards - Statement"
     implemented: true
-    working: true
+    working: "NA"
     file: "/app/backend/server.py"
     stuck_count: 0
     priority: "high"
-    needs_retesting: false
+    needs_retesting: true
     status_history:
       - working: "NA"
         agent: "main"
-        comment: "Endpoints /api/expenses - precisa testar"
-      - working: true
-        agent: "testing"
-        comment: "✅ TESTADO - CRUD completo de despesas funcionando. GET, POST, PUT, DELETE testados. Filtros por mês/ano funcionando."
+        comment: "Endpoint /api/credit-cards/{id}/statement - fatura detalhada"
 
-  - task: "CRUD de Investimentos"
+  - task: "API Credit Cards - Installments"
     implemented: true
-    working: true
+    working: "NA"
     file: "/app/backend/server.py"
     stuck_count: 0
     priority: "high"
-    needs_retesting: false
+    needs_retesting: true
     status_history:
       - working: "NA"
         agent: "main"
-        comment: "Endpoints /api/investments - precisa testar"
-      - working: true
-        agent: "testing"
-        comment: "✅ TESTADO - CRUD completo de investimentos funcionando. GET, POST, PUT, DELETE testados. Filtros por mês/ano funcionando."
+        comment: "Endpoint /api/credit-cards/{id}/installments - parcelas futuras"
 
-  - task: "CRUD de Categorias"
+  - task: "API Credit Cards - Available"
     implemented: true
-    working: true
-    file: "/app/backend/server.py"
-    stuck_count: 0
-    priority: "medium"
-    needs_retesting: false
-    status_history:
-      - working: "NA"
-        agent: "main"
-        comment: "Endpoints /api/categories - precisa testar"
-      - working: true
-        agent: "testing"
-        comment: "✅ TESTADO - CRUD completo de categorias funcionando. GET, POST, PUT, DELETE testados. Categorias padrão criadas automaticamente."
-
-  - task: "CRUD de Cartões de Crédito"
-    implemented: true
-    working: true
-    file: "/app/backend/server.py"
-    stuck_count: 0
-    priority: "medium"
-    needs_retesting: false
-    status_history:
-      - working: "NA"
-        agent: "main"
-        comment: "Endpoints /api/credit-cards - precisa testar"
-      - working: true
-        agent: "testing"
-        comment: "✅ TESTADO - CRUD completo de cartões de crédito funcionando. GET, POST, PUT, DELETE testados."
-
-  - task: "Dashboard Summary"
-    implemented: true
-    working: true
+    working: "NA"
     file: "/app/backend/server.py"
     stuck_count: 0
     priority: "high"
-    needs_retesting: false
+    needs_retesting: true
     status_history:
       - working: "NA"
         agent: "main"
-        comment: "Endpoint /api/dashboard/summary - precisa testar"
-      - working: true
-        agent: "testing"
-        comment: "✅ TESTADO - Dashboard funcionando perfeitamente. Cálculos de balanço corretos. Endpoints /api/dashboard/summary e /api/dashboard/yearly testados."
+        comment: "Endpoint /api/credit-cards/{id}/available - limite disponível"
 
-  - task: "Admin - Gerenciamento de Usuários"
+  - task: "API Credit Cards - Summary"
     implemented: true
-    working: true
+    working: "NA"
     file: "/app/backend/server.py"
     stuck_count: 0
     priority: "high"
-    needs_retesting: false
+    needs_retesting: true
     status_history:
       - working: "NA"
         agent: "main"
-        comment: "Endpoints /api/admin/* - precisa testar"
-      - working: true
-        agent: "testing"
-        comment: "✅ TESTADO - Funcionalidades admin funcionando. Listar usuários, aprovar, bloquear e deletar usuários testados."
-
-  - task: "CRUD de Orçamentos (Budgets)"
-    implemented: true
-    working: true
-    file: "/app/backend/server.py"
-    stuck_count: 0
-    priority: "medium"
-    needs_retesting: false
-    status_history:
-      - working: true
-        agent: "testing"
-        comment: "✅ TESTADO - CRUD completo de orçamentos funcionando. GET, POST, DELETE testados. Lógica de atualização de orçamento existente funcionando."
-
-  - task: "Relatórios por Categoria"
-    implemented: true
-    working: true
-    file: "/app/backend/server.py"
-    stuck_count: 0
-    priority: "medium"
-    needs_retesting: false
-    status_history:
-      - working: true
-        agent: "testing"
-        comment: "✅ TESTADO - Endpoint /api/reports/by-category funcionando para receitas e despesas. Cálculos de percentual corretos."
+        comment: "Endpoint /api/credit-cards/summary - resumo todos cartões"
 
 frontend:
-  - task: "Página de Login"
+  - task: "Página de Recorrentes"
     implemented: true
     working: "NA"
-    file: "/app/frontend/src/pages/Login.jsx"
+    file: "/app/frontend/src/pages/Recorrentes.jsx"
     stuck_count: 0
     priority: "high"
     needs_retesting: true
-    status_history:
-      - working: "NA"
-        agent: "main"
-        comment: "Interface de login - precisa testar"
 
-  - task: "Dashboard"
+  - task: "Painel de Alertas"
     implemented: true
     working: "NA"
-    file: "/app/frontend/src/pages/Dashboard.jsx"
+    file: "/app/frontend/src/components/AlertsPanel.jsx"
     stuck_count: 0
     priority: "high"
     needs_retesting: true
-    status_history:
-      - working: "NA"
-        agent: "main"
-        comment: "Interface do dashboard - precisa testar"
 
-  - task: "Módulo de Entradas"
+  - task: "Painel de Tendências"
     implemented: true
     working: "NA"
-    file: "/app/frontend/src/pages/Entradas.jsx"
+    file: "/app/frontend/src/components/AlertsPanel.jsx"
     stuck_count: 0
     priority: "high"
     needs_retesting: true
-    status_history:
-      - working: "NA"
-        agent: "main"
-        comment: "Interface de entradas - precisa testar"
 
-  - task: "Módulo de Saídas"
+  - task: "Página de Cartões Avançada"
     implemented: true
     working: "NA"
-    file: "/app/frontend/src/pages/Saidas.jsx"
+    file: "/app/frontend/src/pages/Cartoes.jsx"
     stuck_count: 0
     priority: "high"
     needs_retesting: true
-    status_history:
-      - working: "NA"
-        agent: "main"
-        comment: "Interface de saídas - precisa testar"
-
-  - task: "Módulo de Investimentos"
-    implemented: true
-    working: "NA"
-    file: "/app/frontend/src/pages/Investimentos.jsx"
-    stuck_count: 0
-    priority: "high"
-    needs_retesting: true
-    status_history:
-      - working: "NA"
-        agent: "main"
-        comment: "Interface de investimentos - precisa testar"
 
 metadata:
   created_by: "main_agent"
-  version: "1.0"
+  version: "2.0"
   test_sequence: 2
   run_ui: false
 
 test_plan:
-  current_focus: []
+  current_focus:
+    - "API Recurring Transactions"
+    - "API Alerts"
+    - "API Analysis - Trends"
+    - "API Credit Cards Advanced"
   stuck_tasks: []
-  test_all: false
+  test_all: true
   test_priority: "high_first"
 
 agent_communication:
   - agent: "main"
-    message: "Iniciando análise completa do sistema CarFinanças. Todos os serviços estão rodando. Credenciais do admin: email=Pedrohcarvalho1997@gmail.com, senha=S@muka91. Testar todas as APIs do backend para verificar se estão funcionando corretamente."
-  - agent: "testing"
-    message: "✅ ANÁLISE COMPLETA FINALIZADA - Todos os endpoints do backend testados com sucesso! 37/37 testes principais passaram (100% de sucesso). Funcionalidades testadas: Autenticação, CRUD completo (Categorias, Receitas, Despesas, Investimentos, Cartões de Crédito, Orçamentos), Dashboard, Relatórios, Admin. Sistema está funcionando perfeitamente. Apenas 2 questões menores de códigos de status HTTP que não afetam funcionalidade."
+    message: "Implementei todas as funcionalidades das Fases 1 e 2. Testar os novos endpoints de: Lançamentos Recorrentes, Alertas de Orçamento, Alertas de Vencimento, Análise de Tendências, e todos os endpoints avançados de Cartões de Crédito."
