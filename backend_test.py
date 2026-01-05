@@ -392,8 +392,12 @@ class CarFinancasAPITester:
         self.test_categories()
         self.test_incomes()
         self.test_expenses()
+        self.test_investments()
+        self.test_credit_cards()
         self.test_dashboard()
+        self.test_reports()
         self.test_admin_endpoints()
+        self.test_user_registration()
         
         # Print results
         print("\n" + "=" * 50)
