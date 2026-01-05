@@ -557,6 +557,173 @@ async def delete_budget(budget_id: str, user: dict = Depends(get_current_user)):
         raise HTTPException(status_code=404, detail="Budget not found")
     return {"message": "Budget deleted"}
 
+# ==================== BENEFIT (VR/VA) ROUTES ====================
+
+# Benefit Credits (Recebimentos)
+@api_router.get("/benefits/credits", response_model=List[BenefitCredit])
+async def get_benefit_credits(
+    month: Optional[int] = None, 
+    year: Optional[int] = None, 
+    benefit_type: Optional[str] = None,
+    user: dict = Depends(get_current_user)
+):
+    query = {"user_id": user["id"]}
+    if month:
+        query["month"] = month
+    if year:
+        query["year"] = year
+    if benefit_type:
+        query["benefit_type"] = benefit_type
+    credits = await db.benefit_credits.find(query, {"_id": 0}).to_list(1000)
+    return credits
+
+@api_router.post("/benefits/credits", response_model=BenefitCredit)
+async def create_benefit_credit(data: BenefitCreditBase, user: dict = Depends(get_current_user)):
+    credit = BenefitCredit(**data.model_dump(), user_id=user["id"])
+    await db.benefit_credits.insert_one(credit.model_dump())
+    return credit
+
+@api_router.put("/benefits/credits/{credit_id}", response_model=BenefitCredit)
+async def update_benefit_credit(credit_id: str, data: BenefitCreditBase, user: dict = Depends(get_current_user)):
+    result = await db.benefit_credits.update_one(
+        {"id": credit_id, "user_id": user["id"]},
+        {"$set": data.model_dump()}
+    )
+    if result.matched_count == 0:
+        raise HTTPException(status_code=404, detail="Benefit credit not found")
+    return await db.benefit_credits.find_one({"id": credit_id}, {"_id": 0})
+
+@api_router.delete("/benefits/credits/{credit_id}")
+async def delete_benefit_credit(credit_id: str, user: dict = Depends(get_current_user)):
+    result = await db.benefit_credits.delete_one({"id": credit_id, "user_id": user["id"]})
+    if result.deleted_count == 0:
+        raise HTTPException(status_code=404, detail="Benefit credit not found")
+    return {"message": "Benefit credit deleted"}
+
+# Benefit Expenses (Gastos)
+@api_router.get("/benefits/expenses", response_model=List[BenefitExpense])
+async def get_benefit_expenses(
+    month: Optional[int] = None, 
+    year: Optional[int] = None, 
+    benefit_type: Optional[str] = None,
+    category: Optional[str] = None,
+    user: dict = Depends(get_current_user)
+):
+    query = {"user_id": user["id"]}
+    if month:
+        query["month"] = month
+    if year:
+        query["year"] = year
+    if benefit_type:
+        query["benefit_type"] = benefit_type
+    if category:
+        query["category"] = category
+    expenses = await db.benefit_expenses.find(query, {"_id": 0}).to_list(1000)
+    return expenses
+
+@api_router.post("/benefits/expenses", response_model=BenefitExpense)
+async def create_benefit_expense(data: BenefitExpenseBase, user: dict = Depends(get_current_user)):
+    expense = BenefitExpense(**data.model_dump(), user_id=user["id"])
+    await db.benefit_expenses.insert_one(expense.model_dump())
+    return expense
+
+@api_router.put("/benefits/expenses/{expense_id}", response_model=BenefitExpense)
+async def update_benefit_expense(expense_id: str, data: BenefitExpenseBase, user: dict = Depends(get_current_user)):
+    result = await db.benefit_expenses.update_one(
+        {"id": expense_id, "user_id": user["id"]},
+        {"$set": data.model_dump()}
+    )
+    if result.matched_count == 0:
+        raise HTTPException(status_code=404, detail="Benefit expense not found")
+    return await db.benefit_expenses.find_one({"id": expense_id}, {"_id": 0})
+
+@api_router.delete("/benefits/expenses/{expense_id}")
+async def delete_benefit_expense(expense_id: str, user: dict = Depends(get_current_user)):
+    result = await db.benefit_expenses.delete_one({"id": expense_id, "user_id": user["id"]})
+    if result.deleted_count == 0:
+        raise HTTPException(status_code=404, detail="Benefit expense not found")
+    return {"message": "Benefit expense deleted"}
+
+# Benefit Summary (Resumo)
+@api_router.get("/benefits/summary")
+async def get_benefits_summary(month: int, year: int, user: dict = Depends(get_current_user)):
+    # Get all credits and expenses for the month
+    credits = await db.benefit_credits.find(
+        {"user_id": user["id"], "month": month, "year": year}, {"_id": 0}
+    ).to_list(1000)
+    expenses = await db.benefit_expenses.find(
+        {"user_id": user["id"], "month": month, "year": year}, {"_id": 0}
+    ).to_list(1000)
+    
+    # Calculate VR totals
+    vr_credits = sum(c["value"] for c in credits if c["benefit_type"] == "vr")
+    vr_expenses = sum(e["value"] for e in expenses if e["benefit_type"] == "vr")
+    vr_balance = vr_credits - vr_expenses
+    
+    # Calculate VA totals
+    va_credits = sum(c["value"] for c in credits if c["benefit_type"] == "va")
+    va_expenses = sum(e["value"] for e in expenses if e["benefit_type"] == "va")
+    va_balance = va_credits - va_expenses
+    
+    # Group expenses by category
+    vr_by_category = {}
+    va_by_category = {}
+    for e in expenses:
+        cat = e["category"]
+        if e["benefit_type"] == "vr":
+            vr_by_category[cat] = vr_by_category.get(cat, 0) + e["value"]
+        else:
+            va_by_category[cat] = va_by_category.get(cat, 0) + e["value"]
+    
+    return {
+        "month": month,
+        "year": year,
+        "vr": {
+            "credits": vr_credits,
+            "expenses": vr_expenses,
+            "balance": vr_balance,
+            "by_category": vr_by_category
+        },
+        "va": {
+            "credits": va_credits,
+            "expenses": va_expenses,
+            "balance": va_balance,
+            "by_category": va_by_category
+        },
+        "total_credits": vr_credits + va_credits,
+        "total_expenses": vr_expenses + va_expenses,
+        "total_balance": vr_balance + va_balance
+    }
+
+# Benefit Yearly Summary (para gráficos)
+@api_router.get("/benefits/yearly")
+async def get_benefits_yearly(year: int, user: dict = Depends(get_current_user)):
+    monthly_data = []
+    for month in range(1, 13):
+        credits = await db.benefit_credits.find(
+            {"user_id": user["id"], "month": month, "year": year}, {"_id": 0}
+        ).to_list(1000)
+        expenses = await db.benefit_expenses.find(
+            {"user_id": user["id"], "month": month, "year": year}, {"_id": 0}
+        ).to_list(1000)
+        
+        vr_credits = sum(c["value"] for c in credits if c["benefit_type"] == "vr")
+        vr_expenses = sum(e["value"] for e in expenses if e["benefit_type"] == "vr")
+        va_credits = sum(c["value"] for c in credits if c["benefit_type"] == "va")
+        va_expenses = sum(e["value"] for e in expenses if e["benefit_type"] == "va")
+        
+        monthly_data.append({
+            "month": month,
+            "vr_credits": vr_credits,
+            "vr_expenses": vr_expenses,
+            "vr_balance": vr_credits - vr_expenses,
+            "va_credits": va_credits,
+            "va_expenses": va_expenses,
+            "va_balance": va_credits - va_expenses
+        })
+    
+    return monthly_data
+
 # ==================== DASHBOARD/REPORTS ====================
 
 @api_router.get("/dashboard/summary")
