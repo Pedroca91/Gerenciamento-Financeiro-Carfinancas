@@ -40,10 +40,15 @@ export function TopNav() {
   const { user, logout, isAdmin } = useAuth();
   const { theme, toggleTheme } = useTheme();
   const navigate = useNavigate();
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const handleLogout = () => {
     logout();
     navigate('/login');
+  };
+
+  const closeMobileMenu = () => {
+    setMobileMenuOpen(false);
   };
 
   return (
@@ -58,7 +63,7 @@ export function TopNav() {
             </span>
           </div>
 
-          {/* Navigation Tabs */}
+          {/* Desktop Navigation Tabs */}
           <nav className="hidden md:flex items-center gap-1">
             {navItems.map((item) => (
               <NavLink
@@ -95,7 +100,7 @@ export function TopNav() {
             )}
           </nav>
 
-          {/* User Menu */}
+          {/* User Menu & Mobile Toggle */}
           <div className="flex items-center gap-2">
             <Button
               variant="ghost"
@@ -129,8 +134,66 @@ export function TopNav() {
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
+
+            {/* Mobile Menu Toggle */}
+            <Button
+              variant="ghost"
+              size="icon"
+              className="md:hidden rounded-sm"
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              data-testid="mobile-menu-toggle"
+            >
+              {mobileMenuOpen ? (
+                <X className="h-6 w-6" />
+              ) : (
+                <Menu className="h-6 w-6" />
+              )}
+            </Button>
           </div>
         </div>
+
+        {/* Mobile Navigation Menu */}
+        {mobileMenuOpen && (
+          <nav className="md:hidden py-4 border-t border-border">
+            <div className="flex flex-col gap-1">
+              {navItems.map((item) => (
+                <NavLink
+                  key={item.path}
+                  to={item.path}
+                  onClick={closeMobileMenu}
+                  data-testid={`mobile-nav-${item.path.replace('/', '') || 'dashboard'}`}
+                  className={({ isActive }) =>
+                    `flex items-center gap-3 px-4 py-3 rounded-sm text-sm font-medium transition-all ${
+                      isActive
+                        ? 'bg-primary text-primary-foreground'
+                        : 'text-muted-foreground hover:bg-secondary hover:text-foreground'
+                    }`
+                  }
+                >
+                  <item.icon className="h-5 w-5" />
+                  {item.label}
+                </NavLink>
+              ))}
+              {isAdmin && (
+                <NavLink
+                  to="/admin"
+                  onClick={closeMobileMenu}
+                  data-testid="mobile-nav-admin"
+                  className={({ isActive }) =>
+                    `flex items-center gap-3 px-4 py-3 rounded-sm text-sm font-medium transition-all ${
+                      isActive
+                        ? 'bg-accent text-accent-foreground'
+                        : 'text-muted-foreground hover:bg-secondary hover:text-foreground'
+                    }`
+                  }
+                >
+                  <Users className="h-5 w-5" />
+                  Admin
+                </NavLink>
+              )}
+            </div>
+          </nav>
+        )}
       </div>
     </header>
   );
