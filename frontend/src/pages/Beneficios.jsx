@@ -130,7 +130,7 @@ export function Beneficios() {
       if (summaryRes.ok) setSummary(await summaryRes.json());
     } catch (error) {
       console.error('Erro ao carregar dados:', error);
-      toast({ title: 'Erro ao carregar dados', variant: 'destructive' });
+      toast.error('Erro ao carregar dados');
     } finally {
       setLoading(false);
     }
