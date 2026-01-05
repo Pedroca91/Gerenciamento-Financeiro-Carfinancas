@@ -229,7 +229,7 @@ export function Beneficios() {
         throw new Error('Erro ao salvar');
       }
     } catch (error) {
-      toast({ title: 'Erro ao salvar gasto', variant: 'destructive' });
+      toast.error('Erro ao salvar gasto');
     }
   };
 
