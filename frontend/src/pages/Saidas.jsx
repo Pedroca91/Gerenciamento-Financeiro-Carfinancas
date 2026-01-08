@@ -266,7 +266,37 @@ export function Saidas() {
                       <Label>Cartão</Label>
                       <Select
                         value={formData.credit_card_id}
-                        onValueChange={(v) => setFormData({ ...formData, credit_card_id: v })}
+                        onValueChange={(v) => {
+                          // Auto-preencher data de vencimento baseado no cartão
+                          const selectedCard = creditCards.find(c => c.id === v);
+                          let newDueDate = formData.due_date;
+                          
+                          if (selectedCard && selectedCard.due_day) {
+                            // Calcular próximo vencimento baseado na data da compra
+                            const purchaseDate = formData.date ? new Date(formData.date + 'T00:00:00') : new Date();
+                            const closingDay = selectedCard.closing_day || 25;
+                            const dueDay = selectedCard.due_day;
+                            
+                            let dueMonth = purchaseDate.getMonth();
+                            let dueYear = purchaseDate.getFullYear();
+                            
+                            // Se a compra foi depois do fechamento, vai para o próximo mês
+                            if (purchaseDate.getDate() > closingDay) {
+                              dueMonth += 1;
+                            }
+                            // O vencimento é sempre no mês seguinte ao fechamento
+                            dueMonth += 1;
+                            
+                            if (dueMonth > 11) {
+                              dueMonth -= 12;
+                              dueYear += 1;
+                            }
+                            
+                            newDueDate = `${dueYear}-${String(dueMonth + 1).padStart(2, '0')}-${String(dueDay).padStart(2, '0')}`;
+                          }
+                          
+                          setFormData({ ...formData, credit_card_id: v, due_date: newDueDate });
+                        }}
                       >
                         <SelectTrigger>
                           <SelectValue placeholder="Selecione" />
