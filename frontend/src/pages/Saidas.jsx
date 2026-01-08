@@ -300,7 +300,7 @@ export function Saidas() {
                 )}
                 <div className="grid grid-cols-3 gap-4">
                   <div className="space-y-2">
-                    <Label>Data</Label>
+                    <Label>Data da Compra</Label>
                     <Input
                       type="date"
                       value={formData.date}
@@ -310,15 +310,20 @@ export function Saidas() {
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label>Vencimento</Label>
+                    <Label>Vencimento (define o mês)</Label>
                     <Input
                       type="date"
                       value={formData.due_date}
                       onChange={(e) => setFormData({ ...formData, due_date: e.target.value })}
                     />
+                    {formData.due_date && (
+                      <p className="text-xs text-primary">
+                        → Irá para: {new Date(formData.due_date + 'T00:00:00').toLocaleDateString('pt-BR', { month: 'long', year: 'numeric' })}
+                      </p>
+                    )}
                   </div>
                   <div className="space-y-2">
-                    <Label>Pagamento</Label>
+                    <Label>Data Pagamento</Label>
                     <Input
                       type="date"
                       value={formData.payment_date}
