@@ -98,13 +98,24 @@ export function Saidas() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      // Determinar o mês/ano baseado na data de vencimento (due_date)
+      // Se não tiver due_date, usa o mês/ano selecionado
+      let targetMonth = selectedMonth;
+      let targetYear = selectedYear;
+      
+      if (formData.due_date) {
+        const dueDate = new Date(formData.due_date + 'T00:00:00');
+        targetMonth = dueDate.getMonth() + 1; // getMonth() retorna 0-11
+        targetYear = dueDate.getFullYear();
+      }
+      
       const data = {
         ...formData,
         value: parseFloat(formData.value),
         installments: parseInt(formData.installments),
         current_installment: parseInt(formData.current_installment),
-        month: selectedMonth,
-        year: selectedYear
+        month: targetMonth,
+        year: targetYear
       };
 
       if (editingItem) {
@@ -112,7 +123,7 @@ export function Saidas() {
         toast.success('Saída atualizada com sucesso!');
       } else {
         await createExpense(data);
-        toast.success('Saída criada com sucesso!');
+        toast.success(`Saída criada para ${targetMonth.toString().padStart(2, '0')}/${targetYear}!`);
       }
       setIsOpen(false);
       resetForm();
