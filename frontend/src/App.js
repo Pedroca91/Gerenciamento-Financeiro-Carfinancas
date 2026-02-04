@@ -86,6 +86,14 @@ function AppRoutes() {
         }
       />
       <Route
+        path="/login-novo"
+        element={
+          <PublicRoute>
+            <LoginModerno />
+          </PublicRoute>
+        }
+      />
+      <Route
         path="/register"
         element={
           <PublicRoute>
