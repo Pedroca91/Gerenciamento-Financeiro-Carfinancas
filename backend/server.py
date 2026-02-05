@@ -1376,6 +1376,12 @@ async def root():
 async def health():
     return {"status": "healthy"}
 
+# Root health check for Kubernetes (without /api prefix)
+@app.get("/health")
+async def root_health():
+    """Health check endpoint for Kubernetes liveness/readiness probes"""
+    return {"status": "healthy", "service": "carfinancas"}
+
 # Include router and middleware
 app.include_router(api_router)
 
