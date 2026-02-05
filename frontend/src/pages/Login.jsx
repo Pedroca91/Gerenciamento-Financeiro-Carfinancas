@@ -161,12 +161,6 @@ export function Login() {
             </div>
           </div>
 
-          {/* Footer */}
-          <div className="text-center mt-6">
-            <p className="text-xs text-gray-400 dark:text-gray-500">
-              Made with Emergent
-            </p>
-          </div>
         </div>
       </div>
 
