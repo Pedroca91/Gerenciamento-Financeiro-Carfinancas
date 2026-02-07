@@ -3,6 +3,7 @@ import { MonthSelector } from '../components/layout/MonthSelector';
 import { formatCurrency, getMonthName } from '../lib/utils';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
 import { AlertsPanel, TrendsPanel } from '../components/AlertsPanel';
+import { HighlightsCards, ForecastCard, ComparisonCard } from '../components/AdvancedAnalytics';
 import {
   ArrowDownCircle,
   ArrowUpCircle,
