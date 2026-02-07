@@ -1327,6 +1327,283 @@ async def get_dashboard_summary(month: int, year: int, user: dict = Depends(get_
 async def get_yearly_summary(year: int, user: dict = Depends(get_current_user)):
     monthly_data = []
     for month in range(1, 13):
+
+# ==================== ADVANCED ANALYTICS ====================
+
+@api_router.get("/analytics/comparison")
+async def analytics_comparison(
+    month: int,
+    year: int,
+    user: dict = Depends(get_current_user)
+):
+    """Compare current month with previous month and year"""
+    user_id = user["id"]
+    
+    # Current month
+    current_incomes = await db.incomes.find({
+        "user_id": user_id,
+        "month": month,
+        "year": year,
+        "status": "received"
+    }).to_list(1000)
+    
+    current_expenses = await db.expenses.find({
+        "user_id": user_id,
+        "month": month,
+        "year": year,
+        "status": "paid"
+    }).to_list(1000)
+    
+    current_income_total = sum(i["value"] for i in current_incomes)
+    current_expense_total = sum(e["value"] for e in current_expenses)
+    current_balance = current_income_total - current_expense_total
+    
+    # Previous month
+    prev_month = month - 1 if month > 1 else 12
+    prev_year = year if month > 1 else year - 1
+    
+    prev_incomes = await db.incomes.find({
+        "user_id": user_id,
+        "month": prev_month,
+        "year": prev_year,
+        "status": "received"
+    }).to_list(1000)
+    
+    prev_expenses = await db.expenses.find({
+        "user_id": user_id,
+        "month": prev_month,
+        "year": prev_year,
+        "status": "paid"
+    }).to_list(1000)
+    
+    prev_income_total = sum(i["value"] for i in prev_incomes)
+    prev_expense_total = sum(e["value"] for e in prev_expenses)
+    prev_balance = prev_income_total - prev_expense_total
+    
+    # Same month last year
+    last_year_incomes = await db.incomes.find({
+        "user_id": user_id,
+        "month": month,
+        "year": year - 1,
+        "status": "received"
+    }).to_list(1000)
+    
+    last_year_expenses = await db.expenses.find({
+        "user_id": user_id,
+        "month": month,
+        "year": year - 1,
+        "status": "paid"
+    }).to_list(1000)
+    
+    last_year_income_total = sum(i["value"] for i in last_year_incomes)
+    last_year_expense_total = sum(e["value"] for e in last_year_expenses)
+    last_year_balance = last_year_income_total - last_year_expense_total
+    
+    # Calculate variations
+    income_variation = ((current_income_total - prev_income_total) / prev_income_total * 100) if prev_income_total > 0 else 0
+    expense_variation = ((current_expense_total - prev_expense_total) / prev_expense_total * 100) if prev_expense_total > 0 else 0
+    balance_variation = ((current_balance - prev_balance) / abs(prev_balance) * 100) if prev_balance != 0 else 0
+    
+    income_year_variation = ((current_income_total - last_year_income_total) / last_year_income_total * 100) if last_year_income_total > 0 else 0
+    expense_year_variation = ((current_expense_total - last_year_expense_total) / last_year_expense_total * 100) if last_year_expense_total > 0 else 0
+    
+    return {
+        "current": {
+            "income": current_income_total,
+            "expense": current_expense_total,
+            "balance": current_balance
+        },
+        "previous_month": {
+            "income": prev_income_total,
+            "expense": prev_expense_total,
+            "balance": prev_balance
+        },
+        "last_year": {
+            "income": last_year_income_total,
+            "expense": last_year_expense_total,
+            "balance": last_year_balance
+        },
+        "variations": {
+            "income_vs_previous": income_variation,
+            "expense_vs_previous": expense_variation,
+            "balance_vs_previous": balance_variation,
+            "income_vs_last_year": income_year_variation,
+            "expense_vs_last_year": expense_year_variation
+        }
+    }
+
+@api_router.get("/analytics/forecast")
+async def analytics_forecast(
+    month: int,
+    year: int,
+    user: dict = Depends(get_current_user)
+):
+    """Forecast balance for next months based on average"""
+    user_id = user["id"]
+    
+    # Get last 3 months data
+    months_data = []
+    for i in range(3):
+        m = month - i
+        y = year
+        if m <= 0:
+            m += 12
+            y -= 1
+        
+        incomes = await db.incomes.find({
+            "user_id": user_id,
+            "month": m,
+            "year": y,
+            "status": "received"
+        }).to_list(1000)
+        
+        expenses = await db.expenses.find({
+            "user_id": user_id,
+            "month": m,
+            "year": y,
+            "status": "paid"
+        }).to_list(1000)
+        
+        income_total = sum(inc["value"] for inc in incomes)
+        expense_total = sum(exp["value"] for exp in expenses)
+        
+        months_data.append({
+            "month": m,
+            "year": y,
+            "income": income_total,
+            "expense": expense_total,
+            "balance": income_total - expense_total
+        })
+    
+    # Calculate averages
+    avg_income = sum(m["income"] for m in months_data) / len(months_data) if months_data else 0
+    avg_expense = sum(m["expense"] for m in months_data) / len(months_data) if months_data else 0
+    avg_balance = avg_income - avg_expense
+    
+    # Get pending income and expenses for current month
+    pending_income = await db.incomes.find({
+        "user_id": user_id,
+        "month": month,
+        "year": year,
+        "status": "pending"
+    }).to_list(1000)
+    
+    pending_expense = await db.expenses.find({
+        "user_id": user_id,
+        "month": month,
+        "year": year,
+        "status": "pending"
+    }).to_list(1000)
+    
+    pending_income_total = sum(i["value"] for i in pending_income)
+    pending_expense_total = sum(e["value"] for e in pending_expense)
+    
+    # Current balance
+    current_incomes = await db.incomes.find({
+        "user_id": user_id,
+        "month": month,
+        "year": year,
+        "status": "received"
+    }).to_list(1000)
+    
+    current_expenses = await db.expenses.find({
+        "user_id": user_id,
+        "month": month,
+        "year": year,
+        "status": "paid"
+    }).to_list(1000)
+    
+    current_balance = sum(i["value"] for i in current_incomes) - sum(e["value"] for e in current_expenses)
+    
+    # Forecast for end of current month
+    forecast_current = current_balance + pending_income_total - pending_expense_total
+    
+    # Forecast for next 3 months
+    forecast_months = []
+    balance_accumulator = forecast_current
+    
+    for i in range(1, 4):
+        future_month = month + i
+        future_year = year
+        if future_month > 12:
+            future_month -= 12
+            future_year += 1
+        
+        balance_accumulator += avg_balance
+        
+        forecast_months.append({
+            "month": future_month,
+            "year": future_year,
+            "forecasted_balance": balance_accumulator,
+            "avg_income": avg_income,
+            "avg_expense": avg_expense
+        })
+    
+    return {
+        "current_balance": current_balance,
+        "pending_income": pending_income_total,
+        "pending_expense": pending_expense_total,
+        "forecast_current_month": forecast_current,
+        "average_monthly_balance": avg_balance,
+        "forecast_next_months": forecast_months,
+        "historical_data": months_data[::-1]
+    }
+
+@api_router.get("/analytics/highlights")
+async def analytics_highlights(
+    month: int,
+    year: int,
+    user: dict = Depends(get_current_user)
+):
+    """Get largest income and expense for the month"""
+    user_id = user["id"]
+    
+    # Get all incomes and expenses
+    incomes = await db.incomes.find({
+        "user_id": user_id,
+        "month": month,
+        "year": year
+    }).to_list(1000)
+    
+    expenses = await db.expenses.find({
+        "user_id": user_id,
+        "month": month,
+        "year": year
+    }).to_list(1000)
+    
+    # Find largest
+    largest_expense = max(expenses, key=lambda x: x["value"]) if expenses else None
+    largest_income = max(incomes, key=lambda x: x["value"]) if incomes else None
+    
+    # Get category names
+    largest_expense_data = None
+    largest_income_data = None
+    
+    if largest_expense:
+        cat = await db.categories.find_one({"id": largest_expense["category_id"]})
+        largest_expense_data = {
+            "value": largest_expense["value"],
+            "description": largest_expense["description"],
+            "category": cat["name"] if cat else "N/A",
+            "date": largest_expense.get("date", ""),
+            "status": largest_expense["status"]
+        }
+    
+    if largest_income:
+        cat = await db.categories.find_one({"id": largest_income["category_id"]})
+        largest_income_data = {
+            "value": largest_income["value"],
+            "description": largest_income["description"],
+            "category": cat["name"] if cat else "N/A",
+            "date": largest_income.get("date", ""),
+            "status": largest_income["status"]
+        }
+    
+    return {
+        "largest_expense": largest_expense_data,
+        "largest_income": largest_income_data
+    }
+
         incomes = await db.incomes.find({"user_id": user["id"], "month": month, "year": year}, {"_id": 0}).to_list(1000)
         expenses = await db.expenses.find({"user_id": user["id"], "month": month, "year": year}, {"_id": 0}).to_list(1000)
         
