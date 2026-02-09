@@ -139,7 +139,7 @@ export function Dashboard() {
 
       {/* Advanced Analytics - NEW */}
       <div className=\"space-y-4\">
-        <h2 className=\"text-xl font-heading font-semibold\">Analise Avancada</h2>
+        <h2 className="text-xl font-heading font-semibold">Analise Avancada</h2>
         
         {/* Highlights */}
         <HighlightsCards month={selectedMonth} year={selectedYear} />
