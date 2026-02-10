@@ -55,6 +55,8 @@ Sistema completo de gerenciamento financeiro chamado CarFinanças, baseado em pl
 - [x] Status: Pendente/Recebido
 - [x] Totais automáticos
 - [x] **NOVO**: Filtros Avançados (busca, categoria, status, valor mín/máx)
+- [x] **NOVO**: Toggle de status direto na tabela (clique para alternar Recebido/Pendente)
+- [x] **NOVO**: Data de recebimento auto-preenchida ao marcar como Recebido
 
 ### Módulo de Saídas (Despesas)
 - [x] Tabela com lançamentos de despesas
