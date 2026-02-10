@@ -444,14 +444,14 @@ export function Saidas() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {expenses.length === 0 ? (
+              {filteredExpenses.length === 0 ? (
                 <TableRow>
                   <TableCell colSpan={9} className="text-center text-muted-foreground py-8">
                     Nenhuma saída registrada para este período
                   </TableCell>
                 </TableRow>
               ) : (
-                expenses.map((expense) => (
+                filteredExpenses.map((expense) => (
                   <TableRow key={expense.id} data-testid={`expense-row-${expense.id}`}>
                     <TableCell className="font-medium">{getCategoryName(expense.category_id)}</TableCell>
                     <TableCell className="text-muted-foreground">{expense.description || '-'}</TableCell>
