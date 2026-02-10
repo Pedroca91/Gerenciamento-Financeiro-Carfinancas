@@ -130,10 +130,8 @@ export function Entradas() {
     return category?.name || 'Sem categoria';
   };
 
-  const totalReceived = incomes.filter(i => i.status === 'received').reduce((sum, i) => sum + i.value, 0);
-  const totalPending = incomes.filter(i => i.status === 'pending').reduce((sum, i) => sum + i.value, 0);
-  const filteredReceived = filteredIncomes.filter(i => i.status === 'received').reduce((sum, i) => sum + i.value, 0);
-  const filteredPending = filteredIncomes.filter(i => i.status === 'pending').reduce((sum, i) => sum + i.value, 0);
+  const totalReceived = filteredIncomes.filter(i => i.status === 'received').reduce((sum, i) => sum + i.value, 0);
+  const totalPending = filteredIncomes.filter(i => i.status === 'pending').reduce((sum, i) => sum + i.value, 0);
 
   return (
     <div className="space-y-6 animate-fade-in" data-testid="entradas-page">
