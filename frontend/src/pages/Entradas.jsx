@@ -130,11 +130,17 @@ export function Entradas() {
       const newStatus = income.status === 'received' ? 'pending' : 'received';
       const today = new Date().toISOString().split('T')[0];
       
+      // Apenas atualiza o status e a data de recebimento, mantendo todos os outros campos inalterados
       const data = {
-        ...income,
+        category_id: income.category_id,
+        description: income.description,
+        value: income.value,
+        date: income.date,
+        month: income.month,
+        year: income.year,
         status: newStatus,
         // Se marcou como recebido, atualiza a data de recebimento para hoje
-        payment_date: newStatus === 'received' ? today : income.payment_date
+        payment_date: newStatus === 'received' ? today : (income.payment_date || '')
       };
       
       await updateIncome(income.id, data);
