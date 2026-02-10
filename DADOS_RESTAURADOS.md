@@ -7,7 +7,7 @@
 - ✅ Nginx: RUNNING
 
 ## 🌐 URL de Acesso
-**https://visualizador-dados.preview.emergentagent.com**
+**https://carfinancas-restore.preview.emergentagent.com**
 
 ## 🔐 Credenciais
 - **Email**: Pedrohcarvalho1997@gmail.com
