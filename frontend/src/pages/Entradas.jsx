@@ -125,6 +125,25 @@ export function Entradas() {
     }
   };
 
+  const handleToggleStatus = async (income) => {
+    try {
+      const newStatus = income.status === 'received' ? 'pending' : 'received';
+      const today = new Date().toISOString().split('T')[0];
+      
+      const data = {
+        ...income,
+        status: newStatus,
+        // Se marcou como recebido, atualiza a data de recebimento para hoje
+        payment_date: newStatus === 'received' ? today : income.payment_date
+      };
+      
+      await updateIncome(income.id, data);
+      toast.success(newStatus === 'received' ? 'Marcado como recebido!' : 'Marcado como pendente!');
+    } catch (error) {
+      toast.error('Erro ao atualizar status');
+    }
+  };
+
   const getCategoryName = (categoryId) => {
     const category = incomeCategories.find(c => c.id === categoryId);
     return category?.name || 'Sem categoria';
