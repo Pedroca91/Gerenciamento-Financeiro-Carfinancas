@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useFinance } from '../contexts/FinanceContext';
 import { MonthSelector } from '../components/layout/MonthSelector';
+import { AdvancedFilters, filterTransactions } from '../components/AdvancedFilters';
 import { formatCurrency, formatDate, getMonthName } from '../lib/utils';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
 import { Button } from '../components/ui/button';
