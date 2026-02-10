@@ -55,6 +55,15 @@ export function Entradas() {
     payment_date: '',
     status: 'pending'
   });
+  const [filters, setFilters] = useState({
+    search: '',
+    category: 'all',
+    status: 'all',
+    minValue: '',
+    maxValue: ''
+  });
+
+  const filteredIncomes = filterTransactions(incomes, filters);
 
   const resetForm = () => {
     setFormData({
