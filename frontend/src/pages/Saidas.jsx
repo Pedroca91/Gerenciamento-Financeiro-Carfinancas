@@ -60,6 +60,15 @@ export function Saidas() {
     payment_date: '',
     status: 'pending'
   });
+  const [filters, setFilters] = useState({
+    search: '',
+    category: 'all',
+    status: 'all',
+    minValue: '',
+    maxValue: ''
+  });
+
+  const filteredExpenses = filterTransactions(expenses, filters);
 
   const resetForm = () => {
     setFormData({
