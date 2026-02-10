@@ -65,6 +65,8 @@ Sistema completo de gerenciamento financeiro chamado CarFinanças, baseado em pl
 - [x] Status: Pendente/Pago
 - [x] Totais automáticos
 - [x] **NOVO**: Filtros Avançados (busca, categoria, status, valor mín/máx)
+- [x] **NOVO**: Toggle de status direto na tabela (clique para alternar Pago/Pendente)
+- [x] **NOVO**: Data de pagamento auto-preenchida ao marcar como Pago
 
 ### Módulo de Investimentos
 - [x] Tabela por investimento/período
